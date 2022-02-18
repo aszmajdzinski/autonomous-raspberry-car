@@ -3,7 +3,6 @@ import pytest
 from queue import Queue
 from raspberry.Commands.commands import ArduinoCommandList, InfoList, NameValueTuple
 from raspberry.Hardware.motors import MotorControl
-from unittest.mock import Mock
 
 
 class Config:
@@ -37,8 +36,8 @@ def get_input_value(request):
     yield request.param
 
 
-def test_accelerate(get_config, get_input_value):
-    arduino = Mock()
+def test_accelerate(get_config, get_input_value, mocker):
+    arduino = mocker.patch("raspberry.Hardware.arduinoserial.ArduinoCommunication.send_command")
     info_queue = Queue()
 
     expected_value = expected_motor_value(get_input_value, get_config)
@@ -52,8 +51,9 @@ def test_accelerate(get_config, get_input_value):
     assert expected_info_queue_element == info_queue.get()
 
 
-def test_stop(get_config):
-    arduino = Mock()
+def test_stop(get_config, mocker):
+    arduino = mocker.patch("raspberry.Hardware.arduinoserial.ArduinoCommunication.send_command")
+
     info_queue = Queue()
 
     expected_arduino_command = NameValueTuple(name=ArduinoCommandList.STOP, value=0)
