@@ -58,7 +58,7 @@ def get_steering_input_value(request):
 
 
 def test_accelerate(get_config, get_accelerate_input_value, mocker):
-    arduino = mocker.patch("raspberry.Hardware.arduinoserial.ArduinoCommunication.send_command")
+    arduino = mocker.Mock()
     info_queue = Queue()
 
     expected_value = expected_motor_value(get_accelerate_input_value, get_config)
@@ -73,7 +73,7 @@ def test_accelerate(get_config, get_accelerate_input_value, mocker):
 
 
 def test_stop(get_config, mocker):
-    arduino = mocker.patch("raspberry.Hardware.arduinoserial.ArduinoCommunication.send_command")
+    arduino = mocker.Mock()
 
     info_queue = Queue()
 
@@ -88,7 +88,7 @@ def test_stop(get_config, mocker):
 
 
 def test_steering(get_config, get_steering_input_value, mocker):
-    arduino = mocker.patch("raspberry.Hardware.arduinoserial.ArduinoCommunication.send_command")
+    arduino = mocker.Mock()
     info_queue = Queue()
 
     expected_value = expected_steer_value(get_steering_input_value, get_config)
