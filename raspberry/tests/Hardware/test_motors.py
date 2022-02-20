@@ -69,7 +69,7 @@ def test_accelerate(get_config, get_accelerate_input_value, mocker):
     motors.accelerate(get_accelerate_input_value)
 
     arduino.send_command.assert_called_once_with(expected_arduino_command)
-    assert expected_info_queue_element == info_queue.get()
+    assert expected_info_queue_element == info_queue.get(block=False)
 
 
 def test_stop(get_config, mocker):
@@ -84,7 +84,7 @@ def test_stop(get_config, mocker):
     motors.accelerate(0)
 
     arduino.send_command.assert_called_once_with(expected_arduino_command)
-    assert expected_info_queue_element == info_queue.get()
+    assert expected_info_queue_element == info_queue.get(block=False)
 
 
 def test_steering(get_config, get_steering_input_value, mocker):
@@ -99,4 +99,4 @@ def test_steering(get_config, get_steering_input_value, mocker):
     motors.steer(get_steering_input_value)
 
     arduino.send_command.assert_called_once_with(expected_arduino_command)
-    assert expected_info_queue_element == info_queue.get()
+    assert expected_info_queue_element == info_queue.get(block=False)
