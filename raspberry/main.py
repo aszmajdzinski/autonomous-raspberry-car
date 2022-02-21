@@ -1,8 +1,9 @@
 #!/usr/bin/env python
-import argparse
+
 import signal
 from queue import Empty
 from threading import Lock
+from utils import get_cmd_line_arguments
 
 import raspberry.utils as utils
 from raspberry.Config.config import Config
@@ -13,19 +14,8 @@ from raspberry.commands_handler import CommandsHandler
 from raspberry.userinterface import UserInterface
 
 
-def get_cmd_line_arguments():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-nohardware', help='doesn\'t use serial. Use it to run on a PC.', action='store_true')
-    parser.add_argument('-datapath', help='use images from that path instead of camera. Use it when you don\'t have a '
-                                          'PiCamera', default=None)
-    parser.add_argument('-controller', help='specifies controller to be used. Currently acceptable: \n'
-                                            '\'PG9076\' - iPega PG-9076'
-                                            '\'keyboard\' - standard keyboard', default='PG9076')
-    return parser.parse_args()
-
-
 class MainApplication:
-    def __init__(self):
+    def __init__(self, options):
         self.config = Config()
         self.car_state = CarState(config=self.config)
         self.hardware_commands_queue = Queue()
@@ -36,16 +26,17 @@ class MainApplication:
 
         self.hardware = Hardware(config=self.config,
                                  info_queue=self.info_queue,
-                                 no_hardware=get_cmd_line_arguments().nohardware)
+                                 no_hardware=options.nohardware)
 
         self.user_interface = UserInterface(self.user_commands_queue,
                                             info_queue=self.info_queue,
                                             car_state=self.car_state,
-                                            controller=get_cmd_line_arguments().controller)
+                                            controller=options.controller)
 
-        self.autonomous_driving_manager = AutonomousDrivingManager(self.hardware_commands_queue, self.info_queue,
+        self.autonomous_driving_manager = AutonomousDrivingManager(hardware_commands_queue=self.hardware_commands_queue,
+                                                                   info_queue=self.info_queue,
                                                                    image_queue=self.image_queue,
-                                                                   car_state_data_path=get_cmd_line_arguments().datapath,
+                                                                   car_state_data_path=options.datapath,
                                                                    lock=self.lock
                                                                    )
 
@@ -82,5 +73,4 @@ class MainApplication:
 
 
 if __name__ == "__main__":
-    app = MainApplication()
-    app.start_showing_images()
+    app = MainApplication(options=get_cmd_line_arguments())
