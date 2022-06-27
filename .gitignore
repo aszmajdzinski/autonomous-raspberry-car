@@ -1,1 +1,4 @@
 /resources/saved_car_data/
+/raspberry/tests/Hardware/.pytest_cache/
+/raspberry/.pytest_cache/
+/.pytest_cache/
