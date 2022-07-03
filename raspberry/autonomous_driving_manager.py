@@ -3,7 +3,7 @@ from threading import Lock
 from typing import Optional
 
 from AutonomousDrivingMethods import AnotherExampleAutonomousDrivingClass, ExampleAutonomousDrivingClass, \
-    TrailFollower
+    TrailFollower, LaneInTheMiddle
 from AutonomousDrivingMethods.autonomous_driving import AutonomousDrivingState
 from Commands.commands import NameValueTuple
 from Hardware.camera import Camera
@@ -17,10 +17,12 @@ class AutonomousDrivingManager:
         self.camera.initialize_camera()
         self.hardware_commands_queue = hardware_commands_queue
         self.info_queue = info_queue
-        self.args = (self._send_command, self._send_info, self.camera, image_queue, lock)
-        self._methods = [ExampleAutonomousDrivingClass(*self.args),
-                         AnotherExampleAutonomousDrivingClass(*self.args),
-                         TrailFollower(*self.args)]
+        self.method_args = (self._send_command, self._send_info, self.camera, image_queue, lock)
+        self._methods = [ExampleAutonomousDrivingClass(*self.method_args),
+                         AnotherExampleAutonomousDrivingClass(*self.method_args),
+                         TrailFollower(*self.method_args),
+                         LaneInTheMiddle(*self.method_args),
+                         ]
         self.state = AutonomousDrivingState()
         self._set_default_states()
 

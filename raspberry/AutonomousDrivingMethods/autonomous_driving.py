@@ -62,6 +62,8 @@ class AutonomousDrivingAbstractClass(ABC):
             self._process_frame()
             self._send_fps_debug()
         self._cleanup()
+        self._stop_motors()
+        self._steer(0)
 
     def _accelerate(self, value: int):
         self._send_hardware_command(NameValueTuple(name=HardwareCommandList.ACCELERATE, value=value))
@@ -69,7 +71,7 @@ class AutonomousDrivingAbstractClass(ABC):
     def _steer(self, value: int):
         self._send_hardware_command(NameValueTuple(name=HardwareCommandList.STEERING, value=value))
 
-    def _stop(self):
+    def _stop_motors(self):
         self._send_hardware_command(NameValueTuple(name=HardwareCommandList.STOP_MOVING, value=None))
 
     def _send_fps_debug(self):
