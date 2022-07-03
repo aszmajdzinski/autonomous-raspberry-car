@@ -6,8 +6,8 @@ from time import time
 
 import numpy
 
-from raspberry.Commands.commands import NameValueTuple, InfoList, HardwareCommandList
-from raspberry.Hardware.camera import Camera
+from Commands.commands import NameValueTuple, InfoList, HardwareCommandList
+from Hardware.camera import Camera
 
 
 class AutonomousDrivingAbstractClass(ABC):

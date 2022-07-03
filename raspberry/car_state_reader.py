@@ -6,9 +6,9 @@ import cv2
 
 from datetime import datetime
 
-from raspberry.carstate import CarStateData
-from raspberry.Config.config import Config
-from raspberry.text_gui import TUI
+from carstate import CarStateData
+from Config.config import Config
+from text_gui import TUI
 
 
 class CarStateReader:

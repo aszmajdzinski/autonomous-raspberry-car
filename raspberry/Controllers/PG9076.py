@@ -1,4 +1,4 @@
-from raspberry.Commands.commands import GamepadCommands, GamepadEvent, NameValueTuple, UserCommandList
+from Commands.commands import GamepadCommands, GamepadEvent, NameValueTuple, UserCommandList
 from .controller_parent_class import Controller
 from queue import Queue
 try:

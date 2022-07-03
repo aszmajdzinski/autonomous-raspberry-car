@@ -1,4 +1,4 @@
-from raspberry.AutonomousDrivingMethods.autonomous_driving import AutonomousDrivingAbstractClass, Parameter
+from AutonomousDrivingMethods.autonomous_driving import AutonomousDrivingAbstractClass, Parameter
 
 
 class TrailFollower(AutonomousDrivingAbstractClass):

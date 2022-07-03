@@ -1,6 +1,6 @@
-from raspberry.carstate import CarState
-from raspberry.controller_manager import ControllerManager
-from raspberry.text_gui import TUI as TextGUI
+from carstate import CarState
+from controller_manager import ControllerManager
+from text_gui import TUI as TextGUI
 from queue import Queue
 from time import sleep
 from threading import Thread

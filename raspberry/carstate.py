@@ -1,6 +1,6 @@
-from raspberry.autonomous_driving_manager import AutonomousDrivingState
-from raspberry.Commands.commands import NameValueTuple, InfoList
-from raspberry.Config.config import Config
+from autonomous_driving_manager import AutonomousDrivingState
+from Commands.commands import NameValueTuple, InfoList
+from Config.config import Config
 from datetime import datetime
 import shelve
 import cv2

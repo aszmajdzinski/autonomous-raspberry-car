@@ -1,5 +1,4 @@
-from raspberry.Controllers import GamepadPG9076, Keyboard
-from threading import Thread
+from Controllers import GamepadPG9076, Keyboard
 from queue import Queue
 
 try:

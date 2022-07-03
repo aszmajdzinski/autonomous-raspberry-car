@@ -1,10 +1,10 @@
-from raspberry.carstate import CarState
-from raspberry.Hardware.hardware import *
+from carstate import CarState
+from Hardware.hardware import *
 from queue import Queue
-from raspberry.Commands.commands import InfoList, UserCommandList
-from raspberry.userinterface import UserInterface
-import raspberry.Commands.command_utils as main_utils
-from raspberry.autonomous_driving_manager import AutonomousDrivingManager
+from Commands.commands import InfoList, UserCommandList
+from userinterface import UserInterface
+import Commands.utils as main_utils
+from autonomous_driving_manager import AutonomousDrivingManager
 from threading import Thread
 
 

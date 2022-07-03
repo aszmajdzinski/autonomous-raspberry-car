@@ -1,8 +1,8 @@
-from raspberry.Commands.commands import *
-from raspberry.Hardware.arduinoserial import ArduinoCommunication
+from Commands.commands import *
+from Hardware.arduinoserial import ArduinoCommunication
 from queue import Queue
 from types import FunctionType
-from raspberry.Hardware.motors import MotorControl
+from Hardware.motors import MotorControl
 from statistics import median
 
 
