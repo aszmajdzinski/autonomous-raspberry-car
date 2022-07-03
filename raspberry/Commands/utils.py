@@ -1,4 +1,4 @@
-from raspberry.Commands.commands import *
+from Commands.commands import *
 
 user2hardware_commands = {UserCommandList.ACCELERATE: HardwareCommandList.ACCELERATE,
                           UserCommandList.STEERING: HardwareCommandList.STEERING,

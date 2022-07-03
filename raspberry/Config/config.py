@@ -4,7 +4,7 @@ from configparser import ConfigParser
 class Config:
     def __init__(self):
         self.config = ConfigParser()
-        self.config.read("raspberry/Config/config.ini")
+        self.config.read("Config/config.ini")
         self.load_motor_config()
         self.load_steering_config()
         self.load_communication_config()

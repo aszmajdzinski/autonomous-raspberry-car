@@ -5,13 +5,13 @@ from queue import Empty
 from threading import Lock
 from utils import get_cmd_line_arguments
 
-import raspberry.utils as utils
-from raspberry.Config.config import Config
-from raspberry.Hardware.hardware import *
-from raspberry.autonomous_driving_manager import AutonomousDrivingManager
-from raspberry.carstate import CarState
-from raspberry.commands_handler import CommandsHandler
-from raspberry.userinterface import UserInterface
+import utils as utils
+from Config.config import Config
+from Hardware.hardware import *
+from autonomous_driving_manager import AutonomousDrivingManager
+from carstate import CarState
+from commands_handler import CommandsHandler
+from userinterface import UserInterface
 
 
 class MainApplication:

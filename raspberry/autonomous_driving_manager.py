@@ -2,11 +2,11 @@ from queue import Queue
 from threading import Lock
 from typing import Optional
 
-from raspberry.AutonomousDrivingMethods import AnotherExampleAutonomousDrivingClass, ExampleAutonomousDrivingClass, \
+from AutonomousDrivingMethods import AnotherExampleAutonomousDrivingClass, ExampleAutonomousDrivingClass, \
     TrailFollower
-from raspberry.AutonomousDrivingMethods.autonomous_driving import AutonomousDrivingState
-from raspberry.Commands.commands import NameValueTuple
-from raspberry.Hardware.camera import Camera
+from AutonomousDrivingMethods.autonomous_driving import AutonomousDrivingState
+from Commands.commands import NameValueTuple
+from Hardware.camera import Camera
 
 
 class AutonomousDrivingManager:

@@ -1,5 +1,5 @@
-from raspberry.Hardware.arduinoserial import ArduinoCommunication
-from raspberry.Commands.commands import *
+from Hardware.arduinoserial import ArduinoCommunication
+from Commands.commands import *
 from numpy import interp
 from queue import Queue
 

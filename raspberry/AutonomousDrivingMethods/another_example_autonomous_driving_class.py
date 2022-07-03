@@ -1,5 +1,5 @@
-from raspberry.AutonomousDrivingMethods.autonomous_driving import AutonomousDrivingAbstractClass, Parameter
-from raspberry.Commands.commands import NameValueTuple, InfoList
+from AutonomousDrivingMethods.autonomous_driving import AutonomousDrivingAbstractClass, Parameter
+from Commands.commands import NameValueTuple, InfoList
 
 
 class AnotherExampleAutonomousDrivingClass(AutonomousDrivingAbstractClass):

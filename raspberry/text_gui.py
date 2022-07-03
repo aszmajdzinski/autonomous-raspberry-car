@@ -1,8 +1,8 @@
 import os
 
-from raspberry.autonomous_driving_manager import AutonomousDrivingState
-from raspberry.carstate import CarStateData
-from raspberry.utils import get_n_chars
+from autonomous_driving_manager import AutonomousDrivingState
+from carstate import CarStateData
+from utils import get_n_chars
 
 
 def clear_screen():

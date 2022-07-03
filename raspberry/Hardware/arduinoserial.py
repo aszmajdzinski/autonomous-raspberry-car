@@ -1,5 +1,5 @@
-from raspberry.Commands.commands import NameValueTuple
-from raspberry.Config.config import Config
+from Commands.commands import NameValueTuple
+from Config.config import Config
 from threading import Thread
 
 try:

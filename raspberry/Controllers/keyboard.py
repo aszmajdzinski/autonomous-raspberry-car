@@ -1,4 +1,4 @@
-from raspberry.Commands.commands import GamepadCommands, NameValueTuple, UserCommandList
+from Commands.commands import GamepadCommands, NameValueTuple, UserCommandList
 from .controller_parent_class import Controller
 from pynput import keyboard
 from queue import Queue
