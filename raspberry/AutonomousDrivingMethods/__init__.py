@@ -1,4 +1,5 @@
 from .another_example_autonomous_driving_class import AnotherExampleAutonomousDrivingClass
 from .example_autonomous_driving_class import ExampleAutonomousDrivingClass
 from .trail_follower import TrailFollower
-from .lane_in_the_middle import LaneInTheMiddle
+from .lane_in_the_middle_lines_detection import LaneInTheMiddleLinesDetection
+from .line_in_the_middle_blob_detection import LaneInTheMiddleBlobDetection

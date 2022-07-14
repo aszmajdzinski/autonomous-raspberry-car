@@ -16,6 +16,7 @@ class AnotherExampleAutonomousDrivingClass(AutonomousDrivingAbstractClass):
         self._send_info(NameValueTuple(name=InfoList.DEBUG, value=[('i', self.counter)]))
 
     def _cleanup(self):
+
         self._send_info(NameValueTuple(name=InfoList.DEBUG, value=[('mode', ' ')]))
 
     def _process_frame(self):
