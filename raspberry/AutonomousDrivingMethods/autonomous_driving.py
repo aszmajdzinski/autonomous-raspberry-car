@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from queue import Queue
 from threading import Thread, Lock
 from time import time
+import cv2
 
 import numpy
 
@@ -57,19 +58,22 @@ class AutonomousDrivingAbstractClass(ABC):
         self._prepare()
         while self._enabled:
             self.frame = self.camera.grab_frame()
-            self._show_image('Camera', self.frame)
+            self.show_image('Camera', self.frame)
             self._send_info(NameValueTuple(name=InfoList.SAVE_STATE, value=self.frame))
             self._process_frame()
             self._send_fps_debug()
         self._cleanup()
         self._stop_motors()
-        self._steer(0)
+        self.steer(0)
 
-    def _accelerate(self, value: int):
+    def accelerate(self, value: int):
         self._send_hardware_command(NameValueTuple(name=HardwareCommandList.ACCELERATE, value=value))
 
-    def _steer(self, value: int):
+    def steer(self, value: int):
         self._send_hardware_command(NameValueTuple(name=HardwareCommandList.STEERING, value=value))
+        center_point = (int(self.frame.shape[1]/2), 0)
+        end_point = (int(self.frame.shape[1]/2) + value, 4)
+        self.frame = cv2.rectangle(self.frame, center_point, end_point, (0, 255, 0), cv2.FILLED)
 
     def _stop_motors(self):
         self._send_hardware_command(NameValueTuple(name=HardwareCommandList.STOP_MOVING, value=None))
@@ -80,7 +84,7 @@ class AutonomousDrivingAbstractClass(ABC):
         self._previous_frame_read_time = time()
         self._send_info(NameValueTuple(name=InfoList.DEBUG, value=debug))
 
-    def _show_image(self, name: str, image: numpy.ndarray):
+    def show_image(self, name: str, image: numpy.ndarray):
         self.lock.acquire()
         self._image_queue.put((name, image))
         self.lock.release()

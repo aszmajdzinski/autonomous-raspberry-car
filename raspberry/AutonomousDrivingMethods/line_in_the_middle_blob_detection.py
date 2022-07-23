@@ -13,27 +13,35 @@ class LaneInTheMiddleBlobDetection(AutonomousDrivingAbstractClass):
         self.parameters = [Parameter('min_area', (list(range(500, 15501, 1000))), 8)]
 
     def _process_frame(self):
-        img_otsu, img_cropped = self._get_image_otsu(self.frame)
-        self._blob_detection(img_otsu, img_cropped)
-        self._show_image('Camera', self.frame)
+        pos = self._get_current_position()
+        if pos is not None:
+            steering_value = -cv_utils.get_steer_value_from_image_center(pos, self.frame.shape[1])
+            self.steer(steering_value)
+        self.show_image('Camera', self.frame)
+
+    def _get_current_position(self):
+        cropped_frame = cv_utils.crop_image(self.frame)
+        img_otsu = self._get_image_otsu(cropped_frame)
+        return self._blob_detection(img_otsu, cropped_frame)
 
     @staticmethod
     def _get_image_otsu(image):
-        img_cropped = cv_utils.crop_image(image)
-        img_cropped_blurred = cv2.GaussianBlur(img_cropped, (5, 5), 0)
-        img_cropped_blurred_gray = cv2.cvtColor(img_cropped_blurred, cv2.COLOR_BGR2GRAY)
-        _, img_otsu = cv2.threshold(img_cropped_blurred_gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-        img_otsu = cv2.bitwise_not(img_otsu)
-        img_otsu_eroded = cv2.erode(src=img_otsu, kernel=np.ones((7, 7)))
-        return cv2.dilate(src=img_otsu_eroded, kernel=np.ones((11, 11))), img_cropped
+        blurred_image = cv2.GaussianBlur(image, (5, 5), 0)
+        gray_image = cv2.cvtColor(blurred_image, cv2.COLOR_BGR2GRAY)
+        _, otsu_image = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        otsu_image = cv2.bitwise_not(otsu_image)
+        eroded_image = cv2.erode(src=otsu_image, kernel=np.ones((7, 7)))
+        return cv2.dilate(src=eroded_image, kernel=np.ones((11, 11)))
 
-    def _blob_detection(self, bw_image, color_image):
+    def _blob_detection(self, bw_image, output_image):
         contour, area = self._get_contour(bw_image)
         if area >= self.parameters[0].current_value:
             center = self._get_center(contour)
-            cv2.drawContours(color_image, [contour], 0, (255, 255, 0), 2)
-            cv2.circle(color_image, center, 7, (0, 0, 255), -1)
-            self._send_info(NameValueTuple(name=InfoList.DEBUG, value=[('area', area)]))
+            cv2.drawContours(output_image, [contour], 0, (255, 255, 0), 2)
+            cv2.circle(output_image, center, 7, (0, 0, 255), -1)
+            position = center[0] - output_image.shape[1] / 2
+            self._send_info(NameValueTuple(name=InfoList.DEBUG, value=[('area', area), ('pos', position)]))
+            return int(position)
 
     @staticmethod
     def _get_contour(bw_image):

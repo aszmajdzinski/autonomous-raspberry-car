@@ -23,12 +23,12 @@ class AnotherExampleAutonomousDrivingClass(AutonomousDrivingAbstractClass):
         self.counter += 1
         self._send_info(NameValueTuple(name=InfoList.DEBUG, value=[('i', self.counter)]))
         if 30 < self.counter <= 60:
-            self._accelerate(150)
+            self.accelerate(150)
             self._send_info(NameValueTuple(name=InfoList.DEBUG, value=[('mode', 'acc')]))
         elif 60 < self.counter <= 90:
-            self._steer(100)
+            self.steer(100)
             self._send_info(NameValueTuple(name=InfoList.DEBUG, value=[('mode', 'steer')]))
         elif self.counter > 110:
             self._stop_motors()
-            self._steer(0)
+            self.steer(0)
             self._send_info(NameValueTuple(name=InfoList.DEBUG, value=[('mode', 'stop')]))
