@@ -4,18 +4,26 @@ from Commands.commands import NameValueTuple, InfoList
 import cv2
 import numpy as np
 from AutonomousDrivingMethods import cv_utils
+from simple_pid import PID
 
 
 class LaneInTheMiddleBlobDetection(AutonomousDrivingAbstractClass):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.name = 'Lane In The Middle Blob Detection'
-        self.parameters = [Parameter('min_area', (list(range(500, 15501, 1000))), 8)]
+        self.parameters = [Parameter('min_area', (list(range(500, 15501, 1000))), 8),
+                           Parameter('P', list(np.arange(1, 2.5, 0.5)), 0),
+                           Parameter('I', list(np.arange(0.1, 1.1, 0.1)), 0),
+                           Parameter('D', list(np.arange(0.05, 1.05, 0.05)), 1)
+                           ]
+        self.pid = self._create_pid_controller()
 
     def _process_frame(self):
         pos = self._get_current_position()
         if pos is not None:
-            steering_value = -cv_utils.get_steer_value_from_image_center(pos, self.frame.shape[1])
+            steering_value = self.pid(pos)
+            steering_value = -cv_utils.get_steer_value_from_image_center(steering_value, self.frame.shape[1])
+            self._send_info(NameValueTuple(name=InfoList.DEBUG, value=[('pid', steering_value)]))
             self.steer(steering_value)
         self.show_image('Camera', self.frame)
 
@@ -57,3 +65,11 @@ class LaneInTheMiddleBlobDetection(AutonomousDrivingAbstractClass):
         cx = int(moment['m10'] / moment['m00'])
         cy = int(moment['m01'] / moment['m00'])
         return cx, cy
+
+    def _create_pid_controller(self) -> PID:
+        p = self.parameters[1].current_value
+        i = self.parameters[2].current_value
+        d = self.parameters[3].current_value
+        pid = PID(0, p, i, d)
+        pid.output_limits = (-160, 160)
+        return pid
