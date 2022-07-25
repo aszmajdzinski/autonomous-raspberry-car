@@ -7,10 +7,10 @@ from AutonomousDrivingMethods import cv_utils
 from simple_pid import PID
 
 
-class LaneInTheMiddleBlobDetection(AutonomousDrivingAbstractClass):
+class LaneInTheMiddleBlobDetectionPID(AutonomousDrivingAbstractClass):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.name = 'Lane In The Middle Blob Detection'
+        self.name = 'Lane In The Middle Blob Detection PID'
         self.parameters = [Parameter('min_area', (list(range(500, 15501, 1000))), 8),
                            Parameter('P', list(np.arange(1, 2.5, 0.5)), 0),
                            Parameter('I', list(np.arange(0.1, 1.1, 0.1)), 0),
@@ -25,10 +25,9 @@ class LaneInTheMiddleBlobDetection(AutonomousDrivingAbstractClass):
             steering_value = -cv_utils.get_steer_value_from_image_center(steering_value, self.frame.shape[1])
             self._send_info(NameValueTuple(name=InfoList.DEBUG, value=[('pid', steering_value)]))
             self.steer(steering_value)
-        self.show_image('Camera', self.frame)
 
     def _get_current_position(self):
-        cropped_frame = cv_utils.crop_image(self.frame)
+        cropped_frame = cv_utils.crop_image(self.preview)
         img_otsu = self._get_image_otsu(cropped_frame)
         return self._blob_detection(img_otsu, cropped_frame)
 

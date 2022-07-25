@@ -2,8 +2,8 @@ from queue import Queue
 from threading import Lock
 from typing import Optional
 
-from AutonomousDrivingMethods import AnotherExampleAutonomousDrivingClass, ExampleAutonomousDrivingClass, \
-    TrailFollower, LaneInTheMiddleLinesDetection, LaneInTheMiddleBlobDetection
+from AutonomousDrivingMethods import ExampleAutonomousDrivingClass, \
+    LaneInTheMiddleLinesDetection, LaneInTheMiddleBlobDetectionPID, LaneInTheMiddleBlobDetectionProportional
 from AutonomousDrivingMethods.autonomous_driving import AutonomousDrivingState
 from Commands.commands import NameValueTuple
 from Hardware.camera import Camera
@@ -19,10 +19,9 @@ class AutonomousDrivingManager:
         self.info_queue = info_queue
         self.method_args = (self._send_command, self._send_info, self.camera, image_queue, lock)
         self._methods = [ExampleAutonomousDrivingClass(*self.method_args),
-                         AnotherExampleAutonomousDrivingClass(*self.method_args),
-                         TrailFollower(*self.method_args),
                          LaneInTheMiddleLinesDetection(*self.method_args),
-                         LaneInTheMiddleBlobDetection(*self.method_args)
+                         LaneInTheMiddleBlobDetectionPID(*self.method_args),
+                         LaneInTheMiddleBlobDetectionProportional(*self.method_args)
                          ]
         self.state = AutonomousDrivingState()
         self._set_default_states()

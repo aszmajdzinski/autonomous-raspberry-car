@@ -17,6 +17,7 @@ class AutonomousDrivingAbstractClass(ABC):
         self.parameters = []
         self.camera = camera
         self.frame = None
+        self.preview = None
         self._image_queue = image_queue
         self.lock = lock
         self._send_hardware_command = command_call
@@ -58,9 +59,11 @@ class AutonomousDrivingAbstractClass(ABC):
         self._prepare()
         while self._enabled:
             self.frame = self.camera.grab_frame()
+            self.preview = self.frame.copy()
             self.show_image('Camera', self.frame)
             self._send_info(NameValueTuple(name=InfoList.SAVE_STATE, value=self.frame))
             self._process_frame()
+            self.show_image('Preview', self.preview)
             self._send_fps_debug()
         self._cleanup()
         self._stop_motors()
@@ -71,9 +74,6 @@ class AutonomousDrivingAbstractClass(ABC):
 
     def steer(self, value: int):
         self._send_hardware_command(NameValueTuple(name=HardwareCommandList.STEERING, value=value))
-        center_point = (int(self.frame.shape[1]/2), 0)
-        end_point = (int(self.frame.shape[1]/2) + value, 4)
-        self.frame = cv2.rectangle(self.frame, center_point, end_point, (0, 255, 0), cv2.FILLED)
 
     def _stop_motors(self):
         self._send_hardware_command(NameValueTuple(name=HardwareCommandList.STOP_MOVING, value=None))

@@ -6,10 +6,11 @@ import numpy as np
 from AutonomousDrivingMethods import cv_utils
 
 
-class LaneInTheMiddleBlobDetection(AutonomousDrivingAbstractClass):
+class LaneInTheMiddleBlobDetectionProportional(AutonomousDrivingAbstractClass):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.name = 'Lane In The Middle Blob Detection'
+        self.name = 'Lane In The Middle Blob Detection Proportional'
+        self.preview = None
         self.parameters = [Parameter('min_area', (list(range(500, 15501, 1000))), 8)]
 
     def _process_frame(self):
@@ -17,10 +18,9 @@ class LaneInTheMiddleBlobDetection(AutonomousDrivingAbstractClass):
         if pos is not None:
             steering_value = -cv_utils.get_steer_value_from_image_center(pos, self.frame.shape[1])
             self.steer(steering_value)
-        self.show_image('Camera', self.frame)
 
     def _get_current_position(self):
-        cropped_frame = cv_utils.crop_image(self.frame)
+        cropped_frame = cv_utils.crop_image(self.preview)
         img_otsu = self._get_image_otsu(cropped_frame)
         return self._blob_detection(img_otsu, cropped_frame)
 
