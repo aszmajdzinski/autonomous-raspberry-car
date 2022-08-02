@@ -3,7 +3,7 @@ from threading import Lock
 from typing import Optional
 
 from AutonomousDrivingMethods import ExampleAutonomousDrivingClass, \
-    LaneInTheMiddleLinesDetection, LaneInTheMiddleBlobDetectionPID, LaneInTheMiddleBlobDetectionProportional
+    LaneInTheMiddleLinesDetection, LaneInTheMiddleBlobDetectionProportional
 from AutonomousDrivingMethods.autonomous_driving import AutonomousDrivingState
 from Commands.commands import NameValueTuple
 from Hardware.camera import Camera
@@ -20,7 +20,6 @@ class AutonomousDrivingManager:
         self.method_args = (self._send_command, self._send_info, self.camera, image_queue, lock)
         self._methods = [ExampleAutonomousDrivingClass(*self.method_args),
                          LaneInTheMiddleLinesDetection(*self.method_args),
-                         LaneInTheMiddleBlobDetectionPID(*self.method_args),
                          LaneInTheMiddleBlobDetectionProportional(*self.method_args)
                          ]
         self.state = AutonomousDrivingState()
@@ -28,21 +27,21 @@ class AutonomousDrivingManager:
 
     def _set_default_states(self):
         self.state.methods_names = self.methods_names
-        self.select_method(0)
+        self.select_method(0, activate=False)
 
-    def select_method(self, index):
-        self.stop()
+    def select_method(self, index: int, activate=True):
         if 0 <= index < len(self._methods):
+            self.disable_driving()
+            self.selected_method.deactivate()
             self.state.selected_method_index = index
             self.state.selected_method_parameters = self.selected_method.parameters
             self.select_parameter(0)
+            if activate:
+                self.selected_method.activate()
 
     @property
     def methods_names(self) -> list:
-        m = []
-        for method in self._methods:
-            m.append(method.name)
-        return m
+        return [method.name for method in self._methods]
 
     @property
     def selected_method(self):
@@ -54,23 +53,27 @@ class AutonomousDrivingManager:
     def select_parameter_value_index(self, parameter_index: int, parameter_value_index: int):
         self.selected_method.set_parameter_value_index(parameter_index, parameter_value_index)
 
-    def start(self):
-        if not self.state.is_active:
-            self.state.is_active = True
-            self.selected_method.start()
+    def activate_autonomous_driving_mode(self):
+        self.selected_method.activate()
 
-    def stop(self):
-        if self.state.is_active:
-            self.selected_method.stop()
-            self.state.is_active = False
+    def deactivate_autonomous_driving_mode(self):
+        self.selected_method.deactivate()
+
+    def enable_driving(self):
+        if not self.state.is_driving_enabled:
+            self.state.is_driving_enabled = True
+            self.selected_method.enable_driving()
+
+    def disable_driving(self):
+        self.selected_method.disable_driving()
+        self.state.is_driving_enabled = False
 
     def shutdown(self):
-        self.stop()
+        self.disable_driving()
 
     def _send_command(self, hardware_command: NameValueTuple):
-        if self.state.is_active:
+        if self.state.is_driving_enabled:
             self.hardware_commands_queue.put(hardware_command)
 
     def _send_info(self, info: NameValueTuple):
-        if self.state.is_active:
-            self.info_queue.put(info)
+        self.info_queue.put(info)

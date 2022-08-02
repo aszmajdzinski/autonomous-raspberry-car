@@ -20,16 +20,16 @@ class LaneInTheMiddleLinesDetection(AutonomousDrivingAbstractClass):
         self.counter = 0
         self._send_info(NameValueTuple(name=InfoList.DEBUG, value=[('i', self.counter)]))
 
-    def _cleanup(self):
+    def _method_cleanup(self):
 
         self._send_info(NameValueTuple(name=InfoList.DEBUG, value=[('mode', ' ')]))
 
     def _process_frame(self):
         img_otsu, img_cropped = self.get_image_otsu(self.frame)
         img_line = self.line_detection(self.frame)
-        self.show_image('Camera', self.frame)
-        self.show_image('otsu', img_otsu)
-        self.show_image('lines', img_line)
+        self._show_image('Camera', self.frame)
+        self._show_image('otsu', img_otsu)
+        self._show_image('lines', img_line)
 
     def get_image_otsu(self, img, crop_height=0.8, negative=True, erosion_kernel_size=7, dilation_kernel_size=11):
         img_cropped = img[int(img.shape[0] * crop_height):img.shape[0], 0:img.shape[1]]

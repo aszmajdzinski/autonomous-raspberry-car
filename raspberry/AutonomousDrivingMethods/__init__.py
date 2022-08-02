@@ -1,4 +1,3 @@
 from .example_autonomous_driving_class import ExampleAutonomousDrivingClass
 from .lane_in_the_middle_lines_detection import LaneInTheMiddleLinesDetection
-from .line_in_the_middle_blob_detection_pid import LaneInTheMiddleBlobDetectionPID
 from .line_in_the_middle_blob_detection_proportional import LaneInTheMiddleBlobDetectionProportional
