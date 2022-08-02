@@ -17,7 +17,7 @@ class LaneInTheMiddleBlobDetectionProportional(AutonomousDrivingAbstractClass):
         pos = self._get_current_position()
         if pos is not None:
             steering_value = -cv_utils.get_steer_value_from_image_center(pos, self.frame.shape[1])
-            self.steer(steering_value)
+            self._steer(steering_value)
 
     def _get_current_position(self):
         cropped_frame = cv_utils.crop_image(self.preview)

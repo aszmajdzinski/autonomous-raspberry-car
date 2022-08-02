@@ -12,7 +12,7 @@ class ExampleAutonomousDrivingClass(AutonomousDrivingAbstractClass):
     def _prepare(self):
         pass
 
-    def _cleanup(self):
+    def _method_cleanup(self):
         pass
 
     def _process_frame(self):

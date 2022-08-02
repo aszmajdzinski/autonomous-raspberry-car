@@ -80,8 +80,10 @@ class CommandsHandler:
         selected_parameter_value_index = self.autonomous_driving_manager.state.selected_parameter_value_index
 
         if cmd.name == UserCommandList.ENABLE_DISABLE_AUTONOMOUS_MODE:
-            if not cmd.value:
-                self.autonomous_driving_manager.stop()
+            if cmd.value:
+                self.autonomous_driving_manager.activate_autonomous_driving_mode()
+            else:
+                self.autonomous_driving_manager.deactivate_autonomous_driving_mode()
             self.car_state.data.autonomous_mode = cmd.value
 
         elif cmd.name == UserCommandList.PREVIOUS:
@@ -105,9 +107,9 @@ class CommandsHandler:
                                                                          selected_parameter_value_index + 1)
 
         elif cmd.name == UserCommandList.START_STOP_AUTOMOUS_DRIVING:
-            if not self.autonomous_driving_manager.state.is_active:
-                self.autonomous_driving_manager.start()
+            if not self.autonomous_driving_manager.state.is_driving_enabled:
+                self.autonomous_driving_manager.enable_driving()
             else:
-                self.autonomous_driving_manager.stop()
+                self.autonomous_driving_manager.disable_driving()
 
         self.info_queue.put(NameValueTuple(InfoList.AUTONOMOUS_DRIVING_STATE_UPDATED, None))
