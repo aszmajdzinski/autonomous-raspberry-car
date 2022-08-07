@@ -31,7 +31,9 @@ class MainApplication:
         self.user_interface = UserInterface(self.user_commands_queue,
                                             info_queue=self.info_queue,
                                             car_state=self.car_state,
-                                            controller=options.controller)
+                                            controller=options.controller,
+                                            screen_queue=self.image_queue,
+                                            lock=self.lock)
 
         self.autonomous_driving_manager = AutonomousDrivingManager(hardware_commands_queue=self.hardware_commands_queue,
                                                                    info_queue=self.info_queue,
