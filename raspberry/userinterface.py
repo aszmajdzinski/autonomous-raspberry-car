@@ -7,7 +7,7 @@ from time import sleep
 from threading import Lock, Thread
 
 
-class UserInterface(object):
+class UserInterface:
     def __init__(self, user_command_queue: Queue, info_queue: Queue, car_state: CarState, controller: str, screen_queue: Queue, lock: Lock):
         self.user_command_queue = user_command_queue
         self.car_state = car_state
@@ -72,12 +72,12 @@ class UserInterface(object):
 
             if self.state_updates['motors_power']:
                 self.tui.update_motor_power()
-                self.gui.update_motor_power()
+                self.gui.update_motor_power(self.car_state.data.motor_power_value)
                 self.state_updates['motors_power'] = False
 
             if self.state_updates['steering_value']:
                 self.tui.update_steering_value()
-                self.gui.update_steering_value()
+                self.gui.update_steering_value(self.car_state.data.steering_value_255)
                 self.state_updates['steering_value'] = False
 
             if screen_refresh_needed:

@@ -2,6 +2,8 @@ from autonomous_driving_manager import AutonomousDrivingState
 from Commands.commands import NameValueTuple, InfoList
 from Config.config import Config
 from datetime import datetime
+from numpy import interp
+from typing import Optional
 import shelve
 import cv2
 import os
@@ -10,9 +12,10 @@ import os
 class CarStateData:
     def __init__(self, config: Config):
         self.autonomous_mode = False
-        self.autonomous_driving_state: AutonomousDrivingState = None
+        self.autonomous_driving_state: Optional[AutonomousDrivingState] = None
         self.sonar_value = 101
         self.motor_power_value = 0
+        self.config = config
         self.steering_value = config.steering_servo_range[1]
         self.debug_values = dict()
 
@@ -30,8 +33,21 @@ class CarStateData:
         d['debug_values'] = self.debug_values
         return d
 
+    @property
+    def steering_value_255(self):
+        if self.steering_value == self.config.steering_servo_range[1]:
+            return 0
+        elif self.steering_value > self.config.steering_servo_range[1]:
+            return int(interp(self.steering_value,
+                              [self.config.steering_servo_range[1], self.config.steering_servo_range[2]],
+                              [0, -255]))
+        elif self.steering_value < self.config.steering_servo_range[1]:
+            return int(interp(self.steering_value,
+                              [self.config.steering_servo_range[0], self.config.steering_servo_range[1]],
+                              [255, 0]))
 
-class CarState(object):
+
+class CarState:
     def __init__(self, config: Config):
         self.config = config
         self.data = CarStateData(config=config)
